@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using MyApp.Models;
 using MyApp.Models.ViewModels;
 
 namespace MyAppWeb.Areas.Admin.Controllers
@@ -9,9 +10,9 @@ namespace MyAppWeb.Areas.Admin.Controllers
     [Area("Admin")]
     public class AccountController : Controller
     {
-        public UserManager<IdentityUser> userManager { get; }
-        public SignInManager<IdentityUser> signInManager { get; }
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public UserManager<ApplicationUser> userManager { get; }
+        public SignInManager<ApplicationUser> signInManager { get; }
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -26,7 +27,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -73,6 +74,19 @@ namespace MyAppWeb.Areas.Admin.Controllers
             }
             return View(model);
         }
-
+        [AcceptVerbs("Get","Post")]
+        [AllowAnonymous]
+        public async Task<IActionResult> IsEmailInUse(string email)
+        {
+            var user=await userManager.FindByEmailAsync(email);
+            if (user==null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Email {email} is already in use ");
+            }
+        }
     }
 }

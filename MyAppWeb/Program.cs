@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.DataAccessLayer.Infrastructure.Repository;
+using MyApp.Models;
 using MyAppWeb.DataAccessLayer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,7 @@ builder.Services.AddControllersWithViews();
 // Add interface directory
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // add identity in database
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     //set custom options on email
     options.Password.RequiredLength = 10;
