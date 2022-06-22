@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyApp.Models.ViewModels;
 
 namespace MyAppWeb.Areas.Admin.Controllers
 {
+    [AllowAnonymous]
     [Area("Admin")]
     public class AccountController : Controller
     {
         public UserManager<IdentityUser> userManager { get; }
         public SignInManager<IdentityUser> signInManager { get; }
-        public AccountController(UserManager<IdentityUser> userManager,SignInManager<IdentityUser> signInManager)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -19,13 +21,13 @@ namespace MyAppWeb.Areas.Admin.Controllers
         {
             return View();
         }
-        [HttpPost] 
+        [HttpPost]
         public async Task<IActionResult> Register(RegisterVM model)
         {
             if (ModelState.IsValid)
             {
-              var user = new IdentityUser { UserName = model.Email, Email = model.Email };
-              var result=await userManager.CreateAsync(user, model.Password);
+                var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+                var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, isPersistent: false);
@@ -42,7 +44,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
         public async Task<IActionResult> logout()
         {
             await signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Category");
+            return RedirectToAction("login", "Account");
         }
         [HttpGet]
         public IActionResult Login()
@@ -50,19 +52,27 @@ namespace MyAppWeb.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Login(LoginVM model)
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(LoginVM model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Category");
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    {
+                        return LocalRedirect(returnUrl);
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Category");
+                    }
                 }
-                ModelState.AddModelError(String.Empty, "Invalid Login Attempt");
+                ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
             }
             return View(model);
         }
-       
+
     }
 }

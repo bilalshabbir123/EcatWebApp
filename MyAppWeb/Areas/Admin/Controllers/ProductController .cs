@@ -4,6 +4,7 @@ using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.Models;
 using MyApp.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyAppWeb.Areas.Admin.Controllers
 {
@@ -32,6 +33,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
             return View();
         }
         [HttpGet]
+        [Authorize]
         public IActionResult CreateUpdate(int? id)
         {
             ProductVM vm = new ProductVM()

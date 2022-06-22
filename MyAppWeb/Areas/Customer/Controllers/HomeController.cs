@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.Models;
 using System.Diagnostics;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 namespace MyAppWeb.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [AllowAnonymous]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

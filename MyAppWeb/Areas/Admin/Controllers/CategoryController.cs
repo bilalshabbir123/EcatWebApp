@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.Models;
 using MyApp.Models.ViewModels;
@@ -23,6 +24,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
         }
        
         [HttpGet]
+        [Authorize]
         public IActionResult CreateUpdate(int? id)
         {
             CategoryVM vm = new CategoryVM();
@@ -44,6 +46,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
             }
         }
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public IActionResult CreateUpdate(CategoryVM vm)
         {
@@ -66,6 +69,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
+        [Authorize]
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
@@ -80,6 +84,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
             return View(category);
         }
         [HttpPost, ActionName("Delete")]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteData(int? id)
         {
