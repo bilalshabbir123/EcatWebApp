@@ -32,14 +32,20 @@ namespace MyAppWeb.Areas.Admin.Controllers
                 IdentityResult result = await roleManager.CreateAsync(identityRole);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Category");
+                    return RedirectToAction("ListRoles", "Administration");
                 }
-                foreach (IdentityError item in result.Errors)
+                foreach (IdentityError error in result.Errors)
                 {
-
+                    ModelState.AddModelError("",error.Description);
                 }
             }
-            return View();
+            return View(model);
+        }
+        [HttpGet]
+        public IActionResult ListRoles()
+        {
+            var roles = roleManager.Roles;
+            return View(roles);
         }
     }
 }
