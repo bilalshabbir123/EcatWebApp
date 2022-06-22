@@ -4,7 +4,7 @@ using MyApp.Models;
 
 namespace MyAppWeb.DataAccessLayer
 {
-    public class ApplicationDbContext:IdentityDbContext
+    public class ApplicationDbContext:IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             :base(options)

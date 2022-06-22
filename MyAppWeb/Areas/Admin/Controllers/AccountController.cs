@@ -27,7 +27,12 @@ namespace MyAppWeb.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    City=model.City
+                };
                 var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -54,7 +59,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
         }
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginVM model, string returnUrl)
+        public async Task<IActionResult> Login(LoginVM model, string? returnUrl)
         {
             if (ModelState.IsValid)
             {
