@@ -16,3 +16,11 @@ html {
 body {
   margin-bottom: 60px;
 }
+.btn1{
+    width:75px;
+}
+
+.imageThumbnail{
+    height:200px;
+    width:auto;
+}
