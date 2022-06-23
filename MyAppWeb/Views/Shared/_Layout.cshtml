@@ -43,6 +43,21 @@
                         </li>
                         @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
+                            <li class="nav-item">
+                               <a class="nav-link" asp-area="Admin" asp-controller="Administration"
+                                   asp-action="ListUsers">Users</a>
+                             </li> 
+                             <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Administration"
+                                   asp-action="ListRoles">Roles</a>
+                             </li>
+                             <li class="nav-link">
+                                 <a class="dropdown-item" asp-area="Admin" asp-controller="Account"
+                                   asp-action="ChangePassword">Password</a>
+                             </li>
+                        }
+                       @* @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                        {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -57,7 +72,7 @@
                                    asp-action="ChangePassword">Password</a>
                                 </div>
                             </li>
-                        }
+                        }*@
                     </ul>
 
                     @*  <form class="d-flex">
@@ -69,7 +84,7 @@
                         {
                             <li class="nav-item">
                                 <form method="post" asp-controller="Account" asp-action="logout">
-                                    <button typeof="submit" class="nav-link btn1 btn-link py-0" style="width:auto">
+                                    <button type="submit" class="nav-link btn btn-link py-0" style="width:auto">
                                         Logout @User.Identity.Name
                                     </button>
                                 </form>

@@ -11,6 +11,15 @@ namespace MyAppWeb.DataAccessLayer
         {
 
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            foreach (var foreignKey in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+        }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
     }
