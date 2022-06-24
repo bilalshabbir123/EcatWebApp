@@ -10,7 +10,11 @@ namespace MyAppWeb.Areas.Admin.Controllers
     [Area("Admin")]
     //[AllowAnonymous]
     //[Authorize(Roles = "Administrator, User")]
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
+    //[Authorize(Policy = "EditRolePolicy")]
+    [Authorize(Roles ="Admin")]
+
+
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -194,7 +198,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
                 Email = user.Email,
                 UserName = user.Email,
                 City = user.City,
-                Claims = userClaims.Select(c => c.Value).ToList(), 
+                Claims = userClaims.Select(c => c.Type + " : "+ c.Value).ToList(), 
                 Roles = userRoles
             };
             return View(model);
@@ -254,6 +258,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Policy = "DeleteRolePolicy")]
         public async Task<IActionResult> DeleteRole(string id)
         {
             var role = await roleManager.FindByIdAsync(id);
@@ -278,6 +283,8 @@ namespace MyAppWeb.Areas.Admin.Controllers
             }
         }
         [HttpGet]
+        [Authorize(Policy = "EditRolePolicy")]
+
         public async Task<IActionResult> ManageUserRoles(string userId)
         {
             ViewBag.userId = userId;
@@ -308,6 +315,8 @@ namespace MyAppWeb.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
+        [Authorize(Policy = "EditRolePolicy")]
+
         public async Task<IActionResult> ManageUserRoles(List<UserRolesVM> model, string userId)
         {
             var user = await userManager.FindByIdAsync(userId);
@@ -364,7 +373,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
 
                 // If the user has the claim, set IsSelected property to true, so the checkbox
                 // next to the claim is checked on the UI
-                if (existingUserClaims.Any(c => c.Type == claim.Type))
+                if (existingUserClaims.Any(c => c.Type == claim.Type && c.Value=="true"))
                 {
                     userClaim.IsSelected = true;
                 }
@@ -396,7 +405,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
 
             // Add all the claims that are selected on the UI
             result = await userManager.AddClaimsAsync(user,
-                model.Cliams.Where(c => c.IsSelected).Select(c => new Claim(c.ClaimType, c.ClaimType)));
+                model.Cliams.Select(c => new Claim(c.ClaimType, c.IsSelected ? "true":"false")));
 
             if (!result.Succeeded)
             {

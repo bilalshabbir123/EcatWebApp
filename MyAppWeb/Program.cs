@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MyApp.DataAccessLayer.Infrastructure.IRepository;
 using MyApp.DataAccessLayer.Infrastructure.Repository;
 using MyApp.Models;
+using MyApp.Models.Security;
 using MyAppWeb.DataAccessLayer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 // Add interface directory
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+//Add CustomClasswhichmanageotheradminoneadminmanageother
+//builder.Services.AddSingleton<IAuthorizationHandler,
+//        CanEditOnlyOtherAdminRolesAndClaimsHandler>();
 // add identity in database
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -42,7 +47,32 @@ builder.Services.AddControllers(config =>
     config.Filters.Add(new AuthorizeFilter(policy));
 });
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("DeleteRolePolicy",
+        policy => policy.RequireClaim("Delete Role")
+                        .RequireClaim("Create Role"));
 
+    options.AddPolicy("AdminRolePolicy",
+       policy => policy.RequireRole("Admin","User"));
+
+    //options.addpolicy("editrolepolicy",
+    //policy => policy.requireclaim("edit role", "true")
+    //  .requireclaim("admin")
+    //  .requireclaim("super admin"));
+
+    //Custom authorization policy
+    //options.AddPolicy("EditRolePolicy",
+    //    policy => policy.RequireAssertion(context =>
+    //    context.User.IsInRole("Admin") &&
+    //    context.User.HasClaim(claim => claim.Type == "Edit Role" && claim.Value == "true") ||
+    //    context.User.IsInRole("Super Admin")
+    //));
+
+    //CustomeAdminRolesClaimsOnly one Admin manage
+    options.AddPolicy("EditRolePolicy", policy =>
+            policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
+});
 //
 var app = builder.Build();
 
