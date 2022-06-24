@@ -60,8 +60,8 @@ builder.Services.AddControllers(config =>
 builder.Services.AddAuthentication()
    .AddGoogle(options =>
    {
-       options.ClientId = "847358116843-rgedmrpavnd621nbglo1b8s7psb6l2in.apps.googleusercontent.com";
-       options.ClientSecret = "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";
+       options.ClientId = "ClientId";
+       options.ClientSecret = "ClientSecret";
    })
    .AddFacebook(options =>
    {
