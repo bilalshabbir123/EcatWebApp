@@ -51,6 +51,35 @@ builder.Services.AddControllers(config =>
     config.Filters.Add(new AuthorizeFilter(policy));
 });
 
+//Add External Identity Provider
+//builder.Services.AddAuthentication().AddGoogle(options =>
+//{
+//    options.ClientId = "847358116843-rgedmrpavnd621nbglo1b8s7psb6l2in.apps.googleusercontent.com";
+//    options.ClientSecret = "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";
+//});
+builder.Services.AddAuthentication()
+   .AddGoogle(options =>
+   {
+       options.ClientId = "847358116843-rgedmrpavnd621nbglo1b8s7psb6l2in.apps.googleusercontent.com";
+       options.ClientSecret = "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";
+   })
+   .AddFacebook(options =>
+   {
+       options.ClientId = "ClientId";
+       options.ClientSecret = "ClientSecret";
+   })
+   //.AddMicrosoftAccount(microsoftOptions =>
+   //{
+   //    microsoftOptions.ClientId = "Authentication:Microsoft:ClientId";
+   //    microsoftOptions.ClientSecret = "Authentication:Microsoft:ClientSecret";
+   //})
+   .AddTwitter(twitterOptions =>
+   {
+       twitterOptions.ConsumerKey = "Authentication:Twitter:ConsumerAPIKey";
+       twitterOptions.ConsumerSecret = "Authentication:Twitter:ConsumerSecret";
+       twitterOptions.RetrieveUserDetails = true;
+   });
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("DeleteRolePolicy",
