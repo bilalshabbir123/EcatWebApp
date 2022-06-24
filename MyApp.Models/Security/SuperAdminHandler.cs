@@ -12,7 +12,11 @@ namespace MyApp.Models.Security
     {
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, ManageAdminRolesAndClaimsRequirement requirement)
         {
-            throw new NotImplementedException();
+            if (context.User.IsInRole("Super Admin"))
+            {
+                context.Succeed(requirement);
+            }
+            return Task.CompletedTask;
         }
     }
 }

@@ -14,10 +14,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 // Add interface directory
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 //Add CustomClasswhichmanageotheradminoneadminmanageother
-//builder.Services.AddSingleton<IAuthorizationHandler,
-//        CanEditOnlyOtherAdminRolesAndClaimsHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler,
+        CanEditOnlyOtherAdminRolesAndClaimsHandler>();
+
+//Add SuperAdminHandler
+builder.Services.AddSingleton<IAuthorizationHandler,
+        SuperAdminHandler>();
+
 // add identity in database
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -72,6 +76,9 @@ builder.Services.AddAuthorization(options =>
     //CustomeAdminRolesClaimsOnly one Admin manage
     options.AddPolicy("EditRolePolicy", policy =>
             policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
+
+    options.InvokeHandlersAfterFailure = false;
+
 });
 //
 var app = builder.Build();

@@ -12,7 +12,7 @@ namespace MyAppWeb.Areas.Admin.Controllers
     //[Authorize(Roles = "Administrator, User")]
     //[Authorize(Roles = "Admin")]
     //[Authorize(Policy = "EditRolePolicy")]
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
 
 
     public class AdministrationController : Controller

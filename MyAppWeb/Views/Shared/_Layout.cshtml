@@ -41,8 +41,8 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#">Pricing</a>
                         </li>
-                        @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-                        {
+                        @*@if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))*@
+                        @*{*@
                             <li class="nav-item">
                                <a class="nav-link" asp-area="Admin" asp-controller="Administration"
                                    asp-action="ListUsers">Users</a>
@@ -55,7 +55,7 @@
                                  <a class="dropdown-item" asp-area="Admin" asp-controller="Account"
                                    asp-action="ChangePassword">Password</a>
                              </li>
-                        }
+                        @*}*@
                        @* @if (signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
                         {
                             <li class="nav-item dropdown">
